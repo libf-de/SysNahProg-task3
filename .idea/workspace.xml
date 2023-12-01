@@ -16,19 +16,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92975cfa-bc1f-4646-9768-52d88956b8da" name="Changes" comment="Finished find">
-      <change afterPath="$PROJECT_DIR$/.idea/SysNahProg-task3.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="92975cfa-bc1f-4646-9768-52d88956b8da" name="Changes" comment="Currently working?">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lex.yy.o" beforeDir="false" afterPath="$PROJECT_DIR$/lex.yy.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.h" beforeDir="false" afterPath="$PROJECT_DIR$/main.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/main.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myprogram" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/parse.tab.c" beforeDir="false" afterPath="$PROJECT_DIR$/parse.tab.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parse.tab.o" beforeDir="false" afterPath="$PROJECT_DIR$/parse.tab.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parse.y" beforeDir="false" afterPath="$PROJECT_DIR$/parse.y" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myshell" beforeDir="false" afterPath="$PROJECT_DIR$/myshell" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,7 +201,7 @@
       <workItem from="1700071483205" duration="6821000" />
       <workItem from="1700147330069" duration="1729000" />
       <workItem from="1701426221829" duration="2214000" />
-      <workItem from="1701428999823" duration="11968000" />
+      <workItem from="1701428999823" duration="15064000" />
     </task>
     <task id="LOCAL-00001" summary="Finished find">
       <option name="closed" value="true" />
@@ -218,7 +211,23 @@
       <option name="project" value="LOCAL" />
       <updated>1697035789091</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Currently working?">
+      <option name="closed" value="true" />
+      <created>1701441039137</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1701441039137</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Currently working?">
+      <option name="closed" value="true" />
+      <created>1701441044472</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1701441044472</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -226,75 +235,41 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Finished find" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished find" />
+    <MESSAGE value="Currently working?" />
+    <option name="LAST_COMMIT_MESSAGE" value="Currently working?" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>174</line>
+          <line>365</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>180</line>
+          <line>371</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>104</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>110</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>116</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>259</line>
+          <line>387</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>264</line>
+          <line>394</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>54</line>
-          <option name="timeStamp" value="15" />
+          <line>240</line>
+          <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>61</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>77</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>96</line>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>69</line>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>42</line>
-          <option name="timeStamp" value="23" />
+          <line>236</line>
+          <option name="timeStamp" value="32" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
