@@ -50,21 +50,21 @@ redir       : input_redir output_redir
 
 output_redir:    OUTPUT_REDIR STRING
                 {
-                sh_set_output($2);
+                if(!sh_set_output($2)) { YYABORT; }
                 }
         |        /* empty */
 				{
-				sh_set_output(nullptr);
+				/* keep default (stdout) */
 				}
         ;
 
 input_redir:    INPUT_REDIR STRING
                 {
-                sh_set_input($2);
+                if(!sh_set_input($2)) { YYABORT; }
                 }
         |       /* empty */
                 {
-                sh_set_input(nullptr);
+                /* keep default (stdin) */
 				}
         ;
 

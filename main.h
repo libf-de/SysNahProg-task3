@@ -1,3 +1,4 @@
+#include <vector>
 //
 // Created by fsch on 15.11.23.
 //
@@ -7,7 +8,17 @@
 
 #endif //MYSHELL_MAIN_H
 
+struct Command {
+    std::vector<const char *> cmdline;
+    int input{};
+    int output{};
+
+    Command(std::vector<const char*> cmdline, int input, int output) : cmdline(std::move(cmdline)), input(input), output(output) {}
+};
+
 int main(int argc, char *argv[]);
+
+void execute_command_in_pipe(const Command& cmd, int in, int out);
 
 void sh_exit();
 void sh_add_argument(char *arg);

@@ -9,19 +9,13 @@
 #include "main.h"
 #include <unistd.h>
 #include <climits>
+#include <sys/wait.h>
 
 extern FILE *yyin;  // Externe Variable, die vom yacc-Parser verwendet wird
 
-struct Command {
-    std::string cmdline;
-    int input{};
-    int output{};
-
-    Command(std::string cmdline, int input, int output) : cmdline(std::move(cmdline)), input(input), output(output) {}
-};
-
 std::vector<Command> pipe_commands;
-std::string current_command_buf;
+
+std::vector<const char*> current_command_buf;
 int current_command_input = 0;
 int current_command_output = 1;
 
@@ -59,22 +53,32 @@ void test() {
 }
 
 void sh_add_argument(char *arg) {
-    current_command_buf += std::string(" ") + std::string(arg);
+    /*current_command_buf.emplace_back(arg);*/
+    pipe_commands.back().cmdline.emplace_back(arg);
+    //current_command_buf += std::string(" ") + std::string(arg);
     printf("add_arg: %s\n", arg);
 }
 
 void sh_add_command(char *cmd) {
-    current_command_buf = std::string(cmd);
+    pipe_commands.emplace_back(std::vector<const char*>{ cmd }, 0, 1);
+    /*//current_command_buf = std::string(cmd);
+    current_command_buf.clear();
+    current_command_buf.emplace_back(cmd);
     current_command_input = 0;
-    current_command_output = 1;
+    current_command_output = 1;*/
     printf("add_cmd: %s\n", cmd);
 }
 
 void push_command() {
     //insert the command into pipe_commands
-    pipe_commands.push_back(Command{current_command_buf, current_command_input, current_command_output});
+    //pipe_commands.push_back(Command{current_command_buf, current_command_input, current_command_output});
 
-    printf("pushed command to set: %s\n", current_command_buf.c_str());
+    printf("pushed command to set: ");
+
+    for(auto &arg : pipe_commands.back().cmdline) {
+        printf("%s ", arg);
+    }
+    printf("\n");
 }
 
 void sh_set_output(char *file) {
@@ -115,57 +119,75 @@ void sh_signal_simple() {
 
 }
 
-void execute_commands() {
+void print_to_terminal(const char* message) {
+    int fd = open("/dev/tty", O_WRONLY);
+    if (fd == -1) {
+        perror("open");
+        return;
+    }
 
-
+    write(fd, message, strlen(message));
+    close(fd);
 }
 
-void execute_command_pipe() {
-    int cmd_index = 0;
-    int fd[2], in = 0;
-
-    for(auto &command : pipe_commands) {
-        if(command.input != 0 && cmd_index++ != 0) {
+void execute_command_in_pipe(const Command& cmd, int in, int out) {
+    if(fork() == 0) {
+        if(cmd.input == 0 && in != 0) {
             // From Pipe
             dup2(in, 0);
         }
 
-        if (i < commands.size() - 1) {
-            dup2(fd[1], 1); // set up output for this command
+        if(cmd.output == 1 && out != 1) {
+            // To Pipe
+            dup2(out, 1);
         }
 
+        /*print_to_terminal("EXEC: ");
 
-
-        printf("COMMAND = %s\n", command.cmdline.c_str());
-
-        if(command.output != 1) {
-            //get filename from filedescriptor
-            char path[PATH_MAX];
-            ssize_t len;
-
-            len = readlink(
-                    (std::string("/proc/self/fd/") + std::to_string(command.output)).c_str(),
-                    path,
-                    sizeof(path) - 1);
-
-            if (len == -1) {
-                perror("readlink");
-                exit(EXIT_FAILURE);
-            }
-            path[len] = '\0';
-
-            printf("OUTPUT = %s\n", path);
-        } else {
-            int last_index = pipe_commands.size();
-            if(cmd_index == last_index) {
-                printf("OUTPUT = stdout\n");
-            } else {
-                printf("OUTPUT = ↓\n");
-            }
+        for (auto &arg : cmd.cmdline) {
+            print_to_terminal(arg);
+            print_to_terminal(" ");
         }
 
-        printf("--------------------------\n");
+        print_to_terminal("\n");*'*/
+
+        execvp(cmd.cmdline[0], const_cast<char *const *>(cmd.cmdline.data()));
+        exit(EXIT_FAILURE);
     }
+}
+
+
+void execute_command_pipe() {
+
+}
+
+void execute_commands() {
+    int cmd_index = 0;
+    int in = 0;
+    int fd[2];
+
+    for(auto &command : pipe_commands) {
+        if (cmd_index++ < pipe_commands.size() - 1) {
+            // Not last command
+            pipe(fd);
+
+            execute_command_in_pipe(command, in, fd[1]);
+
+            close(fd[1]);
+            in = fd[0];
+        } else {
+            // Last command
+            execute_command_in_pipe(command, in, 1);
+        }
+    }
+
+    // Schließt die letzte offene Lese-Seite der Pipe, falls vorhanden
+    if (in != STDIN_FILENO) {
+        close(in);
+    }
+
+    // Warten auf die Beendigung aller Kindprozesse
+    while (wait(NULL) > 0);
 
     pipe_commands.clear();
 }
@@ -200,7 +222,7 @@ void _execute_commands() {
                 printf("INPUT = ↑\n");
             }
         }
-        printf("COMMAND = %s\n", command.cmdline.c_str());
+        //printf("COMMAND = %s\n", command.cmdline.c_str());
 
         if(command.output != 1) {
             //get filename from filedescriptor

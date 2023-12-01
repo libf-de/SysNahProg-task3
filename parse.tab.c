@@ -1116,7 +1116,7 @@ yyreduce:
   case 11: /* output_redir: OUTPUT_REDIR STRING  */
 #line 52 "parse.y"
                 {
-                sh_set_output((yyvsp[0].string));
+                if(!sh_set_output((yyvsp[0].string))) { YYABORT; }
                 }
 #line 1122 "parse.tab.c"
     break;
@@ -1124,7 +1124,7 @@ yyreduce:
   case 12: /* output_redir: %empty  */
 #line 56 "parse.y"
                                 {
-				sh_set_output(nullptr);
+				/* keep default (stdout) */
 				}
 #line 1130 "parse.tab.c"
     break;
@@ -1132,7 +1132,7 @@ yyreduce:
   case 13: /* input_redir: INPUT_REDIR STRING  */
 #line 62 "parse.y"
                 {
-                sh_set_input((yyvsp[0].string));
+                if(!sh_set_input((yyvsp[0].string))) { YYABORT; }
                 }
 #line 1138 "parse.tab.c"
     break;
@@ -1140,7 +1140,7 @@ yyreduce:
   case 14: /* input_redir: %empty  */
 #line 66 "parse.y"
                 {
-                sh_set_input(nullptr);
+                /* keep default (stdin) */
 				}
 #line 1146 "parse.tab.c"
     break;
