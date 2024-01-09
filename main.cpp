@@ -14,18 +14,18 @@
 #include <pwd.h>
 #include <map>
 
-extern FILE *yyin;  // Externe Variable, die vom yacc-Parser verwendet wird
+extern FILE *yyin;
 
 std::vector<Command> pipe_commands;
 std::map<std::string, std::vector<const char *>> aliases;
 
+// returns the current working directory, to display in prompt
 std::string getCurrentWorkingDir() {
     char cwd[PATH_MAX];
     if (getcwd(cwd, sizeof(cwd)) != NULL) {
         std::string workingDir(cwd);
         std::string homeDir(getenv("HOME"));
 
-        // Ersetzen des Home-Verzeichnisses durch '~', falls vorhanden
         size_t homeDirPos = workingDir.find(homeDir);
         if (homeDirPos == 0) {
             workingDir.replace(0, homeDir.length(), "~");
@@ -44,7 +44,6 @@ void show_prompt() {
 
     printf("\033[1;31m%s@%s\033[0m:\033[1;36m%s\033[0m\033[1m → \033[0m", getenv("USER"), hostname, getCurrentWorkingDir().c_str());
 
-    // read string from stdin
     char *str = nullptr;
     size_t size = 0;
     getline(&str, &size, stdin);
@@ -52,10 +51,8 @@ void show_prompt() {
     yyin = fmemopen(str, size, "r");
     yyrestart(yyin);
 
-    // run parser on string
     yyparse();
 
-    /*fclose(yyin);*/
     free(str);
 }
 
@@ -87,11 +84,11 @@ bool is_number(const char * input) {
     return true;
 }
 
+// converts signal short names to int
 int sigstr_to_int(const char* sigstr) {
     if(is_number(sigstr)) {
         return std::stoi(sigstr);
     } else {
-        // convert sigstr to lowercase std::string
         std::string sigstr_lower(sigstr);
         std::transform(sigstr_lower.begin(), sigstr_lower.end(), sigstr_lower.begin(), ::tolower);
 
@@ -131,6 +128,7 @@ int sigstr_to_int(const char* sigstr) {
     }
 }
 
+// built-in command "alias"
 int builtin_alias(const Command& cmd) {
     if (cmd.cmdline.size() == 1) { //print all aliases
         for (auto &alias: aliases) {
@@ -171,6 +169,7 @@ int builtin_alias(const Command& cmd) {
     }
 }
 
+// built-in command "unalias"
 int builtin_unalias(const Command& cmd) {
     if (cmd.cmdline.size() == 2) {
         if (aliases.find(cmd.cmdline[1]) != aliases.end()) {
@@ -185,15 +184,16 @@ int builtin_unalias(const Command& cmd) {
     }
 }
 
+// built-in command "cd"
 int builtin_cd(const Command& cmd) {
-    if(cmd.cmdline.size() == 2) {
+    if(cmd.cmdline.size() == 2) { //cd to specified directory
         if(chdir(cmd.cmdline[1]) == -1) {
             std::cerr << "error: " << strerror(errno) << ": " << cmd.cmdline[1] << std::endl;
             return EXIT_FAILURE;
         } else {
             return EXIT_SUCCESS;
         }
-    } else if(cmd.cmdline.size() == 1) {
+    } else if(cmd.cmdline.size() == 1) { //cd to home directory
         struct passwd *pw = getpwuid(getuid());
         if(chdir(pw->pw_dir) == -1) {
             std::cerr << "error: " << strerror(errno) << ": " << cmd.cmdline[1] << std::endl;
@@ -204,6 +204,7 @@ int builtin_cd(const Command& cmd) {
     }
 }
 
+// if specified command is built in, run that. execute a binary otherwise. respect aliases.
 void run_command_or_builtin(Command cmd) {
     std::string command(cmd.cmdline[0]);
     if(command == "cd") {
@@ -250,9 +251,10 @@ void run_command_or_builtin(Command cmd) {
 }
 
 void push_command() {
-    //insert the command into pipe_commands
+    // not used anymore.
 }
 
+// sets output of command to be executed
 bool sh_set_output(char *file) {
     if(file == nullptr) {
         std::cerr << "error: output file is null" << std::endl;
@@ -270,6 +272,7 @@ bool sh_set_output(char *file) {
     }
 }
 
+// sets input of command to be executed.
 bool sh_set_input(char *file) {
     if(file == nullptr) {
         std::cerr << "error: input file is null" << std::endl;
@@ -287,6 +290,7 @@ bool sh_set_input(char *file) {
     }
 }
 
+// exits the shell
 void sh_exit() {
     printf("exit\n");
     exit(0);
@@ -294,16 +298,15 @@ void sh_exit() {
 
 // Gets called on the trailing arguments if pipes are used
 void sh_signal_pipe() {
-    //printf("signal_pipe\n");
     push_command();
 }
 
 // Always gets called after the first command
 void sh_signal_simple() {
-    //printf("signal_simple\n");
     push_command();
 }
 
+// used for debug prints, as stdin/out are redirected.
 void print_to_terminal(const char* message) {
     int fd = open("/dev/tty", O_WRONLY);
     if (fd == -1) {
